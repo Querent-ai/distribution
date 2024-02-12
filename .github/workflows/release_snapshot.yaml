@@ -1,0 +1,29 @@
+name: Release artifacts from Quester repository
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  releas-macos-artifacts:
+    name: Build ${{ matrix.target }}
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target: [x86_64-apple-darwin, aarch64-apple-darwin]
+
+    steps:
+        - run: echo "ASSET_FULL_NAME=querent-${{ github.ref }}-${{ matrix.target }}" >> $GITHUB_ENV
+        - name: Download Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
+          run: |
+            wget --header="Authorization: token $PRIVATE_REPO_TOKEN" -O querent-${{github.ref}}-${{matrix.target}}" https://api.github.com/repos/querent-ai/quester/releases
+            echo "Downloaded artifacts for ${{ matrix.target }} and version ${{ github.ref }}"
+        - name: Upload Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
+          uses: quickwit-inc/upload-to-github-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            file: ${{ env.ASSET_FULL_NAME }}.tar.gz
+            overwrite: true
+            tag_name: ${{ github.ref }}
