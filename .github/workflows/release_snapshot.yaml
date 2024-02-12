@@ -14,10 +14,12 @@ jobs:
         target: [x86_64-apple-darwin, aarch64-apple-darwin, 'x86_64-unknown-linux-gnu']
 
     steps:
-      - run: echo "ASSET_FULL_NAME=querent-${{ github.ref }}-${{ matrix.target }}" >> $GITHUB_ENV
+      - name: Extract asset version
+        run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - run: echo "ASSET_FULL_NAME=querent-${ASSET_VERSION}-${{ matrix.target }}" >> $GITHUB_ENV
       - name: Download Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
         run: |
-          wget --header="Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" -O ${{ env.ASSET_FULL_NAME }}.tar.gz https://api.github.com/repos/querent-ai/quester/releases/assets/$(curl -s https://api.github.com/repos/querent-ai/quester/releases/tags/${{ github.ref }} | jq -r '.assets[] | select(.name == env.ASSET_FULL_NAME + ".tar.gz") | .id')
+          wget --header="Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" -O ${{ env.ASSET_FULL_NAME }}.tar.gz https://api.github.com/repos/querent-ai/quester/releases
           echo "Downloaded artifacts for ${{ matrix.target }} and version ${{ github.ref }}"
       - name: Upload Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
         uses: actions/upload-artifact@v2
@@ -31,4 +33,4 @@ jobs:
         with:
           file: ${{ env.ASSET_FULL_NAME }}.tar.gz
           overwrite: true
-          tag_name: ${{ github.ref }}
+          tag_name: ${ASSET_VERSION}
