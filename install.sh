@@ -89,6 +89,7 @@ install_from_archive() {
     esac
 
     local _version=$(get_latest_version "$1")
+    printf "%s Installing Querent version: %s" "$_prompt" "$_version"
     local _archive_content_file="querent-${_version}-${_binary_arch}"
     local _file="${_archive_content_file}.tar.gz"
     local _url="${PACKAGE_ROOT}/${_version}/${_file}"
@@ -179,6 +180,7 @@ semverLT() {
 # Returns the tag of the latest stable release (in terms of semver and not of release date)
 get_latest_version() {
     GREP_SEMVER_REGEXP='v\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)$' # i.e. v[number].[number].[number]
+    GREP_SEMVER_REGEXP_WITH_RC='v\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)-rc\([0-9]*\)$' # i.e. v[number].[number].[number]-rc[number]
     temp_file='temp_file' # temp_file needed because the grep would start before the download is over
     curl -s "${PACKAGE_RELEASE_API}" > "$temp_file" || return 1
     releases=$(cat "$temp_file" | \
@@ -201,7 +203,7 @@ get_latest_version() {
     current_tag=""
     for release_info in $releases; do
         if [ $i -eq 0 ]; then # Checking tag_name
-            if echo "$release_info" | grep -q "$GREP_SEMVER_REGEXP"; then # If it's not an alpha or beta release
+            if echo "$release_info" | grep -q "$GREP_SEMVER_REGEXP_WITH_RC"; then # If it's not an alpha or beta release
                 current_tag=$release_info
             else
                 current_tag=""
