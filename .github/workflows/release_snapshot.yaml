@@ -17,7 +17,7 @@ jobs:
       - run: echo "ASSET_FULL_NAME=querent-${{ github.ref }}-${{ matrix.target }}" >> $GITHUB_ENV
       - name: Download Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
         run: |
-          wget --header="Authorization: token $PRIVATE_REPO_TOKEN" -O ${{ env.ASSET_FULL_NAME }}.tar.gz <url_to_download_artifact>
+          wget --header="Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" -O ${{ env.ASSET_FULL_NAME }}.tar.gz https://api.github.com/repos/querent-ai/quester/releases/assets/$(curl -s https://api.github.com/repos/querent-ai/quester/releases/tags/${{ github.ref }} | jq -r '.assets[] | select(.name == env.ASSET_FULL_NAME + ".tar.gz") | .id')
           echo "Downloaded artifacts for ${{ matrix.target }} and version ${{ github.ref }}"
       - name: Upload Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
         uses: actions/upload-artifact@v2
