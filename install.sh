@@ -49,7 +49,7 @@ EOF
 main() {
     downloader --check
     header
-    install_from_archive "${1:-""}"
+    install_from_archive "${1:-"--allow-any-latest-version"}"
 }
 
 install_from_archive() {
