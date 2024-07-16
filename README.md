@@ -2,7 +2,7 @@
 
 * Offical Docker Hub [Profile](https://hub.docker.com/r/querent/)
 * Querent Docker Image [Quester Release] [Tags
-](https://hub.docker.com/r/querent/quester/tags)
+](https://hub.docker.com/r/querent/querent/tags)
 * Latest Stable Version : **v1.0.1**
 
 # Documentation:
