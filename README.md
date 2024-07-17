@@ -2,7 +2,7 @@
 
 * Offical Docker Hub [Profile](https://hub.docker.com/r/querent/)
 * Querent Docker Image [Querent RIAN Release] [Tags
-](https://hub.docker.com/r/querent/querent/tags)
+](https://hub.docker.com/r/querent/rian/tags)
 * Latest Stable Version : **v4.2.0**
 
 # Documentation:
