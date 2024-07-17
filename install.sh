@@ -14,7 +14,7 @@ set -u
 # If PACKAGE_ROOT is unset or empty, default it.
 PACKAGE_ROOT="${PACKAGE_ROOT:-"https://github.com/querent-ai/distribution/releases/download"}"
 PACKAGE_RELEASE_API="${PACKAGE_RELEASE_API:-"https://api.github.com/repos/querent-ai/distribution/releases"}"
-PACKAGE_NAME="querent"
+PACKAGE_NAME="rian"
 _divider="--------------------------------------------------------------------------------"
 _prompt=">>>"
 _indent="   "
@@ -36,7 +36,7 @@ EOF
 usage() {
     cat 1>&2 <<EOF
 querent-install
-The installer for Querent (https://querent.xyz/)
+The installer for Querent RIAN (https://querent.xyz/)
 
 USAGE:
     querent-install [FLAGS] [OPTIONS]
@@ -89,26 +89,26 @@ install_from_archive() {
     esac
 
     local _version=$(get_latest_version "$1")
-    printf "%s Installing Querent version: %s" "$_prompt" "$_version"
-    local _archive_content_file="querent-${_version}-${_binary_arch}"
+    printf "%s Installing Querent RIAN version: %s" "$_prompt" "$_version"
+    local _archive_content_file="rian-${_version}-${_binary_arch}"
     local _file="${_archive_content_file}.tar.gz"
     local _url="${PACKAGE_ROOT}/${_version}/${_file}"
 
-    printf "%s Downloading Querent via %s" "$_prompt" "$_url"
+    printf "%s Downloading Querent RIAN via %s" "$_prompt" "$_url"
     ensure downloader "$_url" "$_file"
     printf "\n"
 
     printf "%s Unpacking archive ..." "$_prompt"
     ensure tar -xzf "$_file"
-    chmod 744 "./querent-${_version}/querent"
+    chmod 744 "./rian-${_version}/rian"
     ensure rm "$_file"
     printf "\n"
 
     printf "\n"
     printf "%s Install succeeded!\n" "$_prompt"
-    printf "%s To start using Querent:\n" "$_prompt"
+    printf "%s To start using Querent RIAN:\n" "$_prompt"
     printf "\n"
-    printf "%s ./querent-${_version}/querent --version \n" "$_indent"
+    printf "%s ./rian-${_version}/rian --version \n" "$_indent"
     printf "\n"
     printf "%s More information at https://docs.querent.xyz/\n" "$_prompt"
 
