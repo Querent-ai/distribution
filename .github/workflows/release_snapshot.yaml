@@ -93,6 +93,10 @@ jobs:
           name: update.json
           path: update.json
       - name: Run artifact uploader
+        env:
+          ASSET_VERSION: ${{ env.ASSET_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
         run: |
           npm install
           npm run uploader
