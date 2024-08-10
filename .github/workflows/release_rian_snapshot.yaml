@@ -24,7 +24,7 @@ jobs:
       - name: Download the release artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.ASSET_FULL_NAME }}
+          name: ${{ env.ASSET_FULL_NAME }}.tar.gz
           repository: "querent-ai/querent"
           github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
