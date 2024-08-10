@@ -85,9 +85,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          node scripts/updater.mjs
+          npm install
+          npm run updater
       - name: Upload update.json
         uses: actions/upload-artifact@v4
         with:
           name: update.json
           path: update.json
+      - name: Run artifact uploader
+        run: |
+          npm install
+          npm run uploader
