@@ -87,16 +87,18 @@ jobs:
         run: |
           npm install
           npm run updater
-      - name: Upload update.json
-        uses: actions/upload-artifact@v4
+      - name: Upload update.json to release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: update.json
-          path: update.json
+          file: update.json
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
       - name: Run artifact uploader
         env:
           ASSET_VERSION: ${{ env.ASSET_VERSION }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          npm install
           npm run uploader
