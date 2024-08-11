@@ -1,11 +1,12 @@
-name: Release Querent R!AN Snapshot
+name: Release artifacts from Querent Production repository
+
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  release-rian-bare-metal:
+  release-querent-binary-artifacts:
     name: Build ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:
@@ -17,22 +18,19 @@ jobs:
             x86_64-unknown-linux-gnu,
             x86_64-pc-windows-msvc.exe,
           ]
+
     steps:
       - name: Extract asset version
         run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
       - run: echo "ASSET_FULL_NAME=rian-${{ env.ASSET_VERSION }}-${{ matrix.target }}" >> $GITHUB_ENV
-      - name: Download the release artifact
-        uses: actions/download-artifact@v4
+      - uses: dsaltares/fetch-gh-release-asset@master
         with:
-          name: ${{ env.ASSET_FULL_NAME }}.tar.gz
-          repository: "querent-ai/querent"
-          github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload Release Artifacts for ${{ matrix.target }} and version ${{ github.ref }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ASSET_FULL_NAME }}
-          path: ${{ env.ASSET_FULL_NAME }}.tar.gz
-      - name: Upload archive
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: ${{ env.ASSET_FULL_NAME }}.tar.gz
+          target: ${{ env.ASSET_FULL_NAME }}.tar.gz
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload binaries assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,65 +38,99 @@ jobs:
           file: ${{ env.ASSET_FULL_NAME }}.tar.gz
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-  generate-rian-updater-file:
+
+  release-querent-rian-installers:
+    name: Build installers
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Download R!AN Windows
-        uses: actions/download-artifact@v4
+      - name: Extract .AppImage File
+        run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      - uses: dsaltares/fetch-gh-release-asset@master
         with:
-          name: tauri-rian-bundle-windows-latest-x86_64
-          path: artifacts/windows-x86_64
-          repository: "querent-ai/querent"
-          github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Download R!AN Mac(aarch64)
-        uses: actions/download-artifact@v4
-        with:
-          name: tauri-rian-bundle-macos-latest-aarch64
-          path: artifacts/darwin-aarch64
-          repository: "querent-ai/querent"
-          github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Download R!AN Mac(x86_64)
-        uses: actions/download-artifact@v4
-        with:
-          name: tauri-rian-bundle-macos-latest-x86_64
-          path: artifacts/darwin-x86_64
-          repository: "querent-ai/querent"
-          github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Download R!AN Linux
-        uses: actions/download-artifact@v4
-        with:
-          name: tauri-rian-bundle-ubuntu-latest-x86_64
-          path: artifacts/linux-x86_64
-          repository: "querent-ai/querent"
-          github-token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-          registry-url: "https://registry.npmjs.org"
-      - name: Generate update.json
-        env:
-          ASSET_VERSION: ${{ env.ASSET_VERSION }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: ${{ github.sha }}
-        run: |
-          npm install
-          npm run updater
-      - name: Upload update.json to release
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.AppImage"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .AppImage assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: update.json
+          file: "*.AppImage"
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-      - name: Run artifact uploader
+      - name: Extract .AppImage.sig File
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.AppImage.sig"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .AppImage.sig assets to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
         env:
-          ASSET_VERSION: ${{ env.ASSET_VERSION }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: ${{ github.sha }}
-        run: |
-          npm run uploader
+        with:
+          file: "*.AppImage.sig"
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Extract .msi File
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.msi"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .msi assets to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "*.msi"
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Extract .msi.sig File
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.msi.sig"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .msi.sig assets to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "*.msi.sig"
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Extract .app.tar.gz Files
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.app.tar.gz"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .app.tar.gz assets to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "*.app.tar.gz"
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Extract .app.tar.gz.sig Files
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: "*.app.tar.gz.sig"
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload .app.tar.gz.sig assets to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "*.app.tar.gz.sig"
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
