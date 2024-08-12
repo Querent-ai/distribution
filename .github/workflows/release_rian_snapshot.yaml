@@ -50,6 +50,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "*.AppImage"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .AppImage assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
@@ -65,6 +66,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "*.AppImage.sig"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .AppImage.sig assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
@@ -80,6 +82,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "*.msi"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .msi assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
@@ -95,6 +98,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "*.msi.sig"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .msi.sig assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
@@ -110,6 +114,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "*.app.tar.gz"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .app.tar.gz assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
@@ -124,7 +129,8 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.app.tar.gz.sig"
+          file: "*.tar.gz.sig"
+          regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .app.tar.gz.sig assets to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
