@@ -50,7 +50,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*\\.msi"
+          file: ".*\\.msi"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Download Linux Installer(s)
@@ -58,7 +58,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*\\.AppImage"
+          file: ".*\\.AppImage"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Download MacOS Installer(s)
@@ -66,7 +66,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*\\.tar\\.gz"
+          file: ".*\\.tar.gz"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Download All .sig files
@@ -74,6 +74,6 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*\\.sig"
+          file: ".*\\.sig"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
