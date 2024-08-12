@@ -53,6 +53,8 @@ jobs:
           file: ".*\\.msi"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: List files
+        run: ls
       - name: Upload Windows Installer(s) to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
