@@ -83,3 +83,35 @@ jobs:
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: LS rian/
         run: ls rian/
+      - name: Upload Installers to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian/*.msi
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Upload Linux AppImages to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian/*.AppImage
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Upload MacOS Binaries to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian/*.tar.gz
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Upload Signature Files to GitHub Release
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian/*.sig
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
