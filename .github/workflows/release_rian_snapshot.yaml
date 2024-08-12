@@ -49,7 +49,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.AppImage"
+          file: ".*\\.AppImage"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .AppImage assets to GitHub Release
@@ -65,7 +65,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.AppImage.sig"
+          file: ".*\\.AppImage\\.sig"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .AppImage.sig assets to GitHub Release
@@ -81,7 +81,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.msi"
+          file: ".*\\.msi"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .msi assets to GitHub Release
@@ -97,7 +97,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.msi.sig"
+          file: ".*\\.msi\\.sig"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .msi.sig assets to GitHub Release
@@ -113,7 +113,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.app.tar.gz"
+          file: ".*\\.app\\.tar\\.gz"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .app.tar.gz assets to GitHub Release
@@ -129,7 +129,7 @@ jobs:
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: "*.tar.gz.sig"
+          file: ".*\\.app\\.tar\\.gz\\.sig"  # Valid regex pattern
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload .app.tar.gz.sig assets to GitHub Release
