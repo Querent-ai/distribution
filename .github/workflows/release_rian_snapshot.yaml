@@ -39,7 +39,7 @@ jobs:
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
 
-  release-querent-windows-installer:
+  release-querent-rian-installers:
     name: Build Windows Installer
     runs-on: ubuntu-latest
     steps:
@@ -54,14 +54,6 @@ jobs:
           target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload Windows Installer(s) to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: ".*\\.msi"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Linux Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
         with:
@@ -71,14 +63,6 @@ jobs:
           target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload Linux Installer(s) to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: ".*\\.AppImage"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
       - name: Download MacOS Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
         with:
@@ -88,14 +72,6 @@ jobs:
           target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload MacOS Installer(s) to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: ".*\\.tar.gz"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
       - name: Download All .sig files
         uses: dsaltares/fetch-gh-release-asset@master
         with:
@@ -105,13 +81,5 @@ jobs:
           target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload All .sig files to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: ".*\\.sig"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
       - name: LS rian/
         run: ls rian/
