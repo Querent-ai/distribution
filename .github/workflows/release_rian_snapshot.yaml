@@ -68,14 +68,14 @@ jobs:
           file: ".*\\.msi"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Renaming .msi file to rian-windows-${{ env.ASSET_VERSION }}.msi
-        run: mv *.msi rian-windows-${{ env.ASSET_VERSION }}.msi
+      - name: Get first file with .msi extension
+        run: echo "WINDOWS_INSTALLER=$(ls *.msi | head -n 1)" >> $GITHUB_ENV
       - name: Upload Windows Installer(s) to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "rian-windows-${{ env.ASSET_VERSION }}.msi"
+          file: ${{ env.WINDOWS_INSTALLER }}
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Linux Installer(s)
@@ -86,14 +86,14 @@ jobs:
           file: ".*\\.AppImage"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Renaming .AppImage file to rian-linux-${{ env.ASSET_VERSION }}.AppImage
-        run: mv *.AppImage rian-linux-${{ env.ASSET_VERSION }}.AppImage
+      - name: Get first file with .AppImage extension
+        run: echo "LINUX_INSTALLER=$(ls *.AppImage | head -n 1)" >> $GITHUB_ENV
       - name: Upload Linux Installer(s) to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "rian-linux-${{ env.ASSET_VERSION }}.AppImage"
+          file: ${{ env.LINUX_INSTALLER }}
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download MacOS Installer(s)
