@@ -68,12 +68,15 @@ jobs:
           file: ".*\\.msi"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Renaming .msi file to rian-windows-${{ env.ASSET_VERSION }}.msi
+        run: mv *.msi rian-windows-${{ env.ASSET_VERSION }}.msi
       - name: Upload Windows Installer(s) to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ".*\\.msi"
+          file: "rian-windows-${{ env.ASSET_VERSION }}.msi"
+          overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Linux Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
@@ -83,12 +86,15 @@ jobs:
           file: ".*\\.AppImage"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Renaming .AppImage file to rian-linux-${{ env.ASSET_VERSION }}.AppImage
+        run: mv *.AppImage rian-linux-${{ env.ASSET_VERSION }}.AppImage
       - name: Upload Linux Installer(s) to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ".*\\.AppImage"
+          file: "rian-linux-${{ env.ASSET_VERSION }}.AppImage"
+          overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download MacOS Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
@@ -99,11 +105,12 @@ jobs:
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload MacOS Installer(s) to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ".*\\.tar.gz"
+          file: "rian.app.tar.gz;aarch64-rian.app.tar.gz"
+          overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download All .sig files
         uses: dsaltares/fetch-gh-release-asset@master
@@ -114,9 +121,10 @@ jobs:
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload All .sig files to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ".*\\.sig"
+          file: ".*\\.sig"
+          overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
