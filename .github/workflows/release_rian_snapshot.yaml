@@ -59,7 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: rian/.*\\.msi
+          file: ".*\\.msi"
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Linux Installer(s)
@@ -76,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: rian/.*\\.AppImage
+          file: ".*\\.AppImage"
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download MacOS Installer(s)
@@ -93,7 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: rian/.*\\.tar.gz
+          file: ".*\\.tar.gz"
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download All .sig files
@@ -110,7 +110,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: rian/.*\\.sig
+          file: ".*\\.sig"
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-  
+      - name: LS rian/
+        run: ls rian/
