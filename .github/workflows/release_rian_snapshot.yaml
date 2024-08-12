@@ -43,6 +43,8 @@ jobs:
     name: Build Windows Installer
     runs-on: ubuntu-latest
     steps:
+      - name: Extract asset version
+        run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
       - name: Download Windows Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
         with:
