@@ -38,105 +38,156 @@ jobs:
           file: ${{ env.ASSET_FULL_NAME }}.tar.gz
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-
-  release-querent-rian-installers:
-    name: Build installers
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract .AppImage File
-        run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-      - uses: dsaltares/fetch-gh-release-asset@master
-        with:
-          repo: "querent-ai/querent"
-          version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.AppImage"  # Valid regex pattern
-          regex: true
-          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .AppImage assets to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: "*.AppImage"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
-      - name: Extract .AppImage.sig File
+      - name: Download Installer for Windows
+        if: matrix.target == 'x86_64-pc-windows-msvc.exe'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.AppImage\\.sig"  # Valid regex pattern
-          regex: true
+          file: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi
+          target: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .AppImage.sig assets to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: "*.AppImage.sig"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
-      - name: Extract .msi File
+      - name: Download signature for Windows Installer
+        if: matrix.target == 'x86_64-pc-windows-msvc.exe'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.msi"  # Valid regex pattern
-          regex: true
+          file: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi.sig
+          target: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi.sig
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .msi assets to GitHub Release
+      - name: Upload Installer for Windows
+        if: matrix.target == 'x86_64-pc-windows-msvc.exe'
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "*.msi"
+          file: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-      - name: Extract .msi.sig File
+      - name: Upload signature for Windows Installer
+        if: matrix.target == 'x86_64-pc-windows-msvc.exe'
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian_${{ env.ASSET_VERSION }}_x64_en-US.msi.sig
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Download Installer for macOS
+        if: matrix.target == 'x86_64-apple-darwin'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.msi\\.sig"  # Valid regex pattern
-          regex: true
+          file: rian.app.tar.gz
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .msi.sig assets to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: "*.msi.sig"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
-      - name: Extract .app.tar.gz Files
+      - name: Download signature for macOS Installer
+        if: matrix.target == 'x86_64-apple-darwin'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.app\\.tar\\.gz"  # Valid regex pattern
-          regex: true
+          file: rian.app.tar.gz.sig
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .app.tar.gz assets to GitHub Release
+      - name: Upload Installer for macOS
+        if: matrix.target == 'x86_64-apple-darwin'
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "*.app.tar.gz"
+          file: rian.app.tar.gz
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
-      - name: Extract .app.tar.gz.sig Files
+      - name: Upload signature for macOS Installer
+        if: matrix.target == 'x86_64-apple-darwin'
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian.app.tar.gz.sig
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Download Installer for macOS (Apple Silicon)
+        if: matrix.target == 'aarch64-apple-darwin'
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
-          file: ".*\\.app\\.tar\\.gz\\.sig"  # Valid regex pattern
-          regex: true
+          file: aarch64-rian.app.tar.gz
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload .app.tar.gz.sig assets to GitHub Release
+      - name: Download signature for macOS Installer (Apple Silicon)
+        if: matrix.target == 'aarch64-apple-darwin'
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: aarch64-rian.app.tar.gz.sig
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload Installer for macOS (Apple Silicon)
+        if: matrix.target == 'aarch64-apple-darwin'
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "*.app.tar.gz.sig"
+          file: aarch64-rian.app.tar.gz
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Upload signature for macOS Installer (Apple Silicon)
+        if: matrix.target == 'aarch64-apple-darwin'
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: aarch64-rian.app.tar.gz.sig
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Download Installer for Linux
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: rian_${{ env.ASSET_VERSION }}_amd64.AppImage
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Download signature for Linux Installer
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: rian_${{ env.ASSET_VERSION }}_amd64.AppImage.sig
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload Installer for Linux
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian_${{ env.ASSET_VERSION }}_amd64.AppImage
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Upload signature for Linux Installer
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: rian_${{ env.ASSET_VERSION }}_amd64.AppImage.sig
+          overwrite: true
+          tag_name: ${{ env.ASSET_VERSION }}
+      - name: Download update.json
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: "querent-ai/querent"
+          version: "tags/${{ env.ASSET_VERSION }}"
+          file: update.json
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Upload update.json
+        uses: quickwit-inc/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: update.json
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
