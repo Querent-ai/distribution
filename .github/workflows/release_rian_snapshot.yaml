@@ -45,37 +45,21 @@ jobs:
     steps:
       - name: Extract asset version
         run: echo "ASSET_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-      - name: Download update.json
-        uses: dsaltares/fetch-gh-release-asset@master
-        with:
-          repo: "querent-ai/querent"
-          version: "tags/${{ env.ASSET_VERSION }}"
-          file: "update.json"
-          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Upload update.json to GitHub Release
-        uses: quickwit-inc/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          file: "update.json"
-          overwrite: true
-          tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Windows Installer(s)
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: ".*\\.msi"
+          target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Get first file with .msi extension
-        run: echo "WINDOWS_INSTALLER=$(ls *.msi | head -n 1)" >> $GITHUB_ENV
       - name: Upload Windows Installer(s) to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: ${{ env.WINDOWS_INSTALLER }}
+          file: rian/.*\\.msi
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download Linux Installer(s)
@@ -84,16 +68,15 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: ".*\\.AppImage"
+          target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      - name: Get first file with .AppImage extension
-        run: echo "LINUX_INSTALLER=$(ls *.AppImage | head -n 1)" >> $GITHUB_ENV
       - name: Upload Linux Installer(s) to GitHub Release
         uses: quickwit-inc/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: ${{ env.LINUX_INSTALLER }}
+          file: rian/.*\\.AppImage
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download MacOS Installer(s)
@@ -102,6 +85,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: ".*\\.tar.gz"
+          target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload MacOS Installer(s) to GitHub Release
@@ -109,7 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "rian.app.tar.gz;aarch64-rian.app.tar.gz"
+          file: rian/.*\\.tar.gz
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
       - name: Download All .sig files
@@ -118,6 +102,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: ".*\\.sig"
+          target: "rian/"
           regex: true
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: Upload All .sig files to GitHub Release
@@ -125,6 +110,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: ".*\\.sig"
+          file: rian/.*\\.sig
           overwrite: true
           tag_name: ${{ env.ASSET_VERSION }}
+  
