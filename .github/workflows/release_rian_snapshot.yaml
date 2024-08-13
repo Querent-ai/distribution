@@ -87,7 +87,7 @@ jobs:
           repo: "querent-ai/querent"
           version: "tags/${{ env.ASSET_VERSION }}"
           file: "update.json"
-          target: "rian/"
+          target: "rian/update.json"
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
       - name: LS rian/
         run: ls rian/
