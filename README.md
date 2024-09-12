@@ -3,7 +3,7 @@
 * Offical Docker Hub [Profile](https://hub.docker.com/r/querent/)
 * Querent Docker Image [Querent RIAN Release] [Tags
 ](https://hub.docker.com/r/querent/rian/tags)
-* Latest Stable Version : **v1.0.1**
+* Latest Stable Version : [**v1.0.1**](https://github.com/Querent-ai/distribution/releases)
 
 # AppImage based Installation:
   * https://github.com/AppImage/AppImageKit/wiki/FUSE
